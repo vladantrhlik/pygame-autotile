@@ -78,14 +78,14 @@ class AutoTile:
 							allDirections = self.directions[my][mx]
 							valid = True
 							for d in allDirections:
-								if 0<=x+d[0]<len(map) and 0<=y+d[1]<len(map[0]):
+								if 0<=x+d[0]<len(map[0]) and 0<=y+d[1]<len(map):
 									try:
 										if map[y + d[1]][x + d[0]] == 0:
 											valid = False
 									except:
 										valid = False
 								else:
-									valied = False
+									valid = False
 
 							if valid: mask[my][mx] = 1
 					try:
@@ -94,6 +94,7 @@ class AutoTile:
 					except:
 						t = self.tiles[11]
 						t.draw(screen, x*self.tileSize, y*self.tileSize)
+
 
 map = [[0 for x in range(10)] for y in range(10)]
 
