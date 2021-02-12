@@ -5,8 +5,6 @@ pg.init()
 screen = pg.display.set_mode([640, 640])
 running = True
 
-
-
 class Tile:
 	def __init__(self, x, y, mask, image):
 		self.mask = mask
@@ -62,8 +60,6 @@ class AutoTile:
 
 					self.tiles.append(Tile(x,y,m,surf))
 
-					print(m)
-
 	def getTile(self, mask):
 		for t in self.tiles:
 			if mask == t.mask:
@@ -82,11 +78,14 @@ class AutoTile:
 							allDirections = self.directions[my][mx]
 							valid = True
 							for d in allDirections:
-								try:
-									if map[y + d[1]][x + d[0]] == 0:
+								if 0<=x+d[0]<len(map) and 0<=y+d[1]<len(map[0]):
+									try:
+										if map[y + d[1]][x + d[0]] == 0:
+											valid = False
+									except:
 										valid = False
-								except:
-									valid = False
+								else:
+									valied = False
 
 							if valid: mask[my][mx] = 1
 					try:
@@ -109,16 +108,24 @@ while running:
 	x = math.floor(pos[0]/64)
 	y = math.floor(pos[1]/64)
 
+	color = [255,255,255]
+
 	if pg.mouse.get_pressed()[0] == 1:
 		map[y][x] = 1
 	elif pg.mouse.get_pressed()[2] == 1:
 		map[y][x] = 0
+		color = [255,0,0]
 
 	screen.fill((40,40,40))
 
 	surf = pg.Surface((160,160))
 	autotile.renderMap(surf, map)
 	screen.blit(pg.transform.scale(surf, (640,640)), (0,0))
+
+	cursor = pg.Surface((64,64), pg.SRCALPHA, 32)
+	cursor.fill(color + [100])
+
+	screen.blit(cursor, (x*64,y*64))
 
 	pg.display.flip()
 
